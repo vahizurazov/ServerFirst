@@ -15,20 +15,21 @@ const kharkiv =
 const florida =
   "https://api.darksky.net/forecast/3d894b4be108444b6212b5f1791a8b10/43.7695,11.2558";
 
-const miniState = {
-  columns: [
-    { title: "First", id: "1" },
-    { title: "Second", id: "2" },
-    { title: "Third", id: "13" }
-  ]
-};
+// const miniState = {
+//   columns: [
+//     { title: "First", id: "1" },
+//     { title: "Second", id: "2" },
+//     { title: "Third", id: "13" }
+//   ]
+// };
 
 const getApiAndEmit = async socket => {
   try {
-    // const res = await axios.get(kharkiv); // Getting the data from DarkSky
-    const res = await miniState;
-    console.log("response", res);
-    socket.emit("FromAPI", res); // Emitting a new message. It will be consumed by the client
+    const res = await axios.get(kharkiv); // Getting the data from DarkSky 755027
+
+    // const res = await miniState;
+    console.log("response", res.data);
+    socket.emit("FromAPI", res.data); // Emitting a new message. It will be consumed by the client
   } catch (error) {
     console.error(`Error: ${error.code}`);
   }
@@ -37,11 +38,11 @@ const getApiAndEmit = async socket => {
 let interval;
 io.on("connection", socket => {
   console.log("New client connected");
-  console.log(socket, "socket");
+  // console.log(socket, "socket");
 
-  //   if (interval) {
-  //     clearInterval(interval);
-  //   }
+  // if (interval) {
+  //   clearInterval(interval);
+  // }
   getApiAndEmit(socket);
   socket.on("disconnect", () => {
     console.log("Client disconnected");
